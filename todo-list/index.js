@@ -27,6 +27,7 @@ function criarLiNaTela(item) {
   checkbox.addEventListener("change", () => {
     item.concluida = checkbox.checked;
     li.classList.toggle("completed");
+    localStorage.setItem("tarefas", JSON.stringify(lista));
   });
 
   // deletar essa tarefa
@@ -36,6 +37,7 @@ function criarLiNaTela(item) {
     lista.splice(indice, 1);
     li.remove();
     atualizarContador();
+    localStorage.setItem("tarefas", JSON.stringify(lista));
   });
 }
 
@@ -54,6 +56,9 @@ console.log(lista)
   lista.push(item);
   criarLiNaTela(item);
   atualizarContador();
+
+  localStorage.setItem("tarefas", JSON.stringify(lista));
+
 });
 
 // Botão limpar concluídas (registrado UMA vez, fora do listener do addBtn)
@@ -66,4 +71,15 @@ deletarConcluidas.addEventListener("click", () => {
 
   atualizarContador();
   console.log(lista)
+  localStorage.setItem("tarefas", JSON.stringify(lista));
+});
+
+// ao carregar a página
+window.addEventListener('DOMContentLoaded', () => {
+  const salvo = localStorage.getItem("tarefas");
+  if (salvo) {
+    lista = JSON.parse(salvo);
+    lista.forEach(item => criarLiNaTela(item));
+    atualizarContador();
+  }
 });
